@@ -42,13 +42,15 @@ const goods = [
     res.status(200).json({goods})
   });
 
-  //상품 상세 조회 API
+  // 상품 상세 조회 API
   router.get("/goods/:goodsId", (req,res) => {
     const {goodsId} = req.params;
     const [detail] = goods.filter((goods) => Number(goodsId) === goods.goodsId)
     res.json({detail});
   });
 
+  // 이미 장바구니에 상품이 들어가 있는지 확인 후, 존재하면 errorMessage를 전달하고, 
+  // 존재하지 않는다면 새로운 카트에 상품정보를 새로 생성
   const Cart = require("../schemas/cart");
   router.post("/goods/:goodsId/cart", async (req, res) => {
     const {goodsId} = req.params;
@@ -67,6 +69,9 @@ const goods = [
   res.json({result: "success"});
 })
 
+  // 상품 추가 API
+  // goodsId를 이용해서 상품정보가 장바구니내에 존재한다면 
+  // body를 통해 받아온 quantity 값에 맞게 상품 수량을 수정
   router.put("/goods/:goodsId/cart", async (req, res) => {
     const {goodsId} = req.params;
     const {quantity} = req.body;
@@ -81,6 +86,7 @@ const goods = [
     res.status(200).json({success:true});
   })
 
+  // 상품 삭제 API
   router.delete("/goods/:goodsId/cart", async (req, res) => {
     const {goodsId} = req.params;
   
@@ -92,22 +98,23 @@ const goods = [
     res.json({result: "success"});
   });
 
-const Goods = require("../schemas/goods");
-router.post("/goods", async (req, res) => {
-	const { goodsId, name, thumbnailUrl, category, price } = req.body;
+  // 상품 생성 API
+  const Goods = require("../schemas/goods");
+  router.post("/goods", async (req, res) => {
+    const { goodsId, name, thumbnailUrl, category, price } = req.body;
 
-  const goods = await Goods.find({ goodsId });
-  if (goods.length) {
-    return res.status(400).json({
-      success: false, 
-      errorMessage: "이미 존재하는 GoodsId 입니다."
-    });
-  }
+    const goods = await Goods.find({ goodsId });
+    if (goods.length) {
+      return res.status(400).json({
+        success: false, 
+        errorMessage: "이미 존재하는 GoodsId 입니다."
+      });
+    }
 
-  const createdGoods = await Goods.create({ goodsId, name, thumbnailUrl, category, price });
+    const createdGoods = await Goods.create({ goodsId, name, thumbnailUrl, category, price });
 
-  res.json({ goods: createdGoods });
-});
+    res.json({ goods: createdGoods });
+  });
 
 
-  module.exports = router;
+    module.exports = router;
