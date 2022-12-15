@@ -69,7 +69,7 @@ const goods = [
   res.json({result: "success"});
 })
 
-  // 상품 추가 API
+
   // goodsId를 이용해서 상품정보가 장바구니내에 존재한다면 
   // body를 통해 받아온 quantity 값에 맞게 상품 수량을 수정
   router.put("/goods/:goodsId/cart", async (req, res) => {

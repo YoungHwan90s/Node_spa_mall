@@ -3,6 +3,7 @@ const Goods = require("../schemas/goods");
 const Cart = require("../schemas/cart");
 const router = express.Router();
 
+// 카트 조회 API
 router.get("/carts", async (req, res) => {
   const carts = await Cart.find({});
     // [
@@ -13,7 +14,7 @@ router.get("/carts", async (req, res) => {
     return cart.goodsId
   });
   // ex) [2, 11, 1];
-
+  
   // goodsId에 해당하는 goods를 가지고 오기
   const goods = await Goods.find({ goodsId: goodsIds });
 
